@@ -1,74 +1,61 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, View, Button, StatusBar, SafeAreaView, FlatList, TouchableHighlight, Text, Dimensions, ImageBackground, Pressable } from 'react-native';
+import { Link, router } from 'expo-router';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function DartScreen() {
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+    const gamemodes = [{ name: '301', image: require('../../assets/images/301.avif') }, { name: 'Cricket', image: require('../../assets/images/cricket.jpg') }];
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.title}>
+                <Text style={styles.titleText}>
+                    Game modes
+                </Text>
+            </View>
+            <FlatList data={gamemodes} renderItem={({ item }) => (
+                <TouchableHighlight onPress={() => { router.navigate({ pathname: "/settings", params: { gamemodeName: item.name } }); }}>
+                    <ImageBackground resizeMode='cover' style={styles.button} imageStyle={styles.image} source={item.image}>
+                        <Text style={styles.buttonText}>{item.name}</Text>
+                    </ImageBackground>
+                </TouchableHighlight>
+            )} />
+        </SafeAreaView>
+    );
 }
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    title: {
+        paddingVertical: windowHeight * 0.03,
+        alignItems: 'center',
+    },
+    titleText: {
+        color: 'white',
+        fontSize: 40,
+
+    },
+    container: {
+        height: windowHeight,
+    },
+    button: {
+        borderRadius: windowHeight * 0.02,
+        alignItems: 'center',
+        paddingVertical: windowHeight * 0.05,
+        marginHorizontal: windowWidth * 0.05,
+        marginVertical: windowHeight * 0.01,
+    }
+    ,
+    buttonText: {
+        fontSize: 40,
+        color: 'white',
+        textShadowColor: 'black',
+        textShadowRadius: 10,
+        textShadowOffset: { width: -1, height: 1 },
+    },
+    image: {
+        borderRadius: windowHeight * 0.02,
+    },
+
 });
